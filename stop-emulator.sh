@@ -2,6 +2,9 @@
 
 # Script to stop Android emulator
 
+ANDROID_HOME="/Users/rustam/Library/Android/sdk"
+export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'

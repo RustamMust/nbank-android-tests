@@ -18,7 +18,7 @@ repositories {
 dependencies {
     // Selenide + Selenium
     implementation 'com.codeborne:selenide:6.19.1'
-    implementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.13.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'

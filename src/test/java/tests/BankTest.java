@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import pages.LoginPage;
 
-public class BankTests extends BaseTest {
+public class BankTest extends BaseTest {
     @Test
     public void userCanLogin() {
         new LoginPage()
