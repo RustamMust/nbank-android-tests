@@ -73,27 +73,28 @@ while [ $WAIT_TIME -lt $MAX_WAIT ]; do
   echo -e "${YELLOW}⌛ Still waiting... (${WAIT_TIME}s)${NC}"
 done
 
-echo -e "${RED}✖ Emulator failed to start within ${MAX_WAIT} seconds${NC}"
-exit 1
-
-
-# Install Appium Settings APK
-SETTINGS_APK="$HOME/.appium/node_modules/appium-viautomator2-driver/node_modules/io.appium.settings/apks/settings_apk
-if [ -f "$SETTINGS_APK" ]; then
-echo -e "${YELLOW© Installing Appium Settings APK…..${NC}"
-adb -s emulator-5554 install -r "$SETTINGS_APK"
-
-echo -e "${YELLOW} / Granting necessary permissions to Appium Settings...${NC}"
-adb -s emulator-5554 shell pm grant io.appium.settings android.permission.WRITE_SECURE_SETTINGS
-adb -s emulator-5554 shell pm grant io.appium.settings android.permission.SET_ANIMATION_SCALE
-adb -s emulator-5554 shell pm grant io.appium.settings android.permission. CHANGE_CONFIGURATION
-adb -s emulator-5554 shell pm grant io.appium.settings android.permission.ACCESS_FINE_LOCATION
-
-echo -e "${GREEN] Appium Settings installed and permissions granted$-{NC)"
-else
-echo -e "${RED}X Appium Settings APK not found at $SETTINGS_APK${NC}"
+if ! adb devices | grep -q "emulator.*device"; then
+  echo -e "${RED}✖ Emulator failed to start${NC}"
+  exit 1
 fi
 
-# Wait additional 5 seconds just to be safe
-echo -e "SEVELLOW-& Waiting an eStra 5 seconds for stability...sNC?™
+# Install Appium Settings
+SETTINGS_APK="$(find "$HOME/.appium" -name 'settings_apk-debug.apk' | head -n 1)"
+
+if [ -f "$SETTINGS_APK" ]; then
+  echo -e "${YELLOW}📦 Installing Appium Settings...${NC}"
+  adb -s emulator-5554 install -r "$SETTINGS_APK"
+
+  echo -e "${YELLOW}🔐 Granting permissions...${NC}"
+  adb -s emulator-5554 shell pm grant io.appium.settings android.permission.WRITE_SECURE_SETTINGS
+  adb -s emulator-5554 shell pm grant io.appium.settings android.permission.SET_ANIMATION_SCALE
+  adb -s emulator-5554 shell pm grant io.appium.settings android.permission.CHANGE_CONFIGURATION
+  adb -s emulator-5554 shell pm grant io.appium.settings android.permission.ACCESS_FINE_LOCATION
+
+  echo -e "${GREEN}✔ Appium Settings ready${NC}"
+else
+  echo -e "${RED}✖ Appium Settings APK not found${NC}"
+fi
+
+echo -e "${YELLOW}⏳ Small delay for stability...${NC}"
 sleep 5
